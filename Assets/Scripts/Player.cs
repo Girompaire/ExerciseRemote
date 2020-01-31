@@ -29,8 +29,8 @@ namespace Completed
         bool P1_OK,P2_OK;
         Vector2 P1_Value, P2_Value;
         Coroutine Wait = null;
-        GameObject playerOneArrow;
-        GameObject playerTwoArrow;
+        public  GameObject playerOneArrow;
+        public GameObject playerTwoArrow;
 
 
         //Start overrides the Start function of MovingObject
