@@ -26,10 +26,13 @@ namespace Completed
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
 #endif
-		
-		
-		//Start overrides the Start function of MovingObject
-		protected override void Start ()
+        bool P1_OK,P2_OK;
+        Vector2 P1_Value, P2_Value;
+        Coroutine Wait = null;
+
+
+        //Start overrides the Start function of MovingObject
+        protected override void Start ()
 		{
 			//Get a component reference to the Player's animator component
 			animator = GetComponent<Animator>();
@@ -58,23 +61,27 @@ namespace Completed
 			//If it's not the player's turn, exit the function.
 			if(!GameManager.instance.playersTurn) return;
 			
-			int horizontal = 0;  	//Used to store the horizontal move direction.
-			int vertical = 0;		//Used to store the vertical move direction.
-			
-			//Check if we are running either in the Unity editor or in a standalone build.
+			int P1_H = 0;  	//Used to store the horizontal move direction.
+			int P1_V = 0;		//Used to store the vertical move direction.
+            int P2_H = 0;
+            int P2_V = 0;
+
+            //Check if we are running either in the Unity editor or in a standalone build.
 #if UNITY_STANDALONE || UNITY_WEBPLAYER
-			
-			//Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
-			horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
-			
-			//Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
-			vertical = (int) (Input.GetAxisRaw ("Vertical"));
+
+            //Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
+            P1_H = (int) (Input.GetAxisRaw ("Horizontal"));
+            P2_H = (int) (Input.GetAxisRaw ("Horizontal2"));
+
+            //Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
+            P1_V = (int) (Input.GetAxisRaw ("Vertical"));
+            P2_V = (int) (Input.GetAxisRaw ("Vertical2"));
 			
 			//Check if moving horizontally, if so set vertical to zero.
-			if(horizontal != 0)
+			/*if(horizontal != 0)
 			{
 				vertical = 0;
-			}
+			}*/
 			//Check if we are running on iOS, Android, Windows Phone 8 or Unity iPhone
 #elif UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
 			
@@ -118,14 +125,90 @@ namespace Completed
 			
 #endif //End of mobile platform dependendent compilation section started above with #elif
 			//Check if we have a non-zero value for horizontal or vertical
-			if(horizontal != 0 || vertical != 0)
+
+
+
+
+
+
+			if((P1_H != 0 || P1_V != 0) && P1_OK == false)
 			{
-				//Call AttemptMove passing in the generic parameter Wall, since that is what Player may interact with if they encounter one (by attacking it)
-				//Pass in horizontal and vertical as parameters to specify the direction to move Player in.
-				AttemptMove<Wall> (horizontal, vertical);
+                P1_Value = new Vector2((int)P1_H, (int)P1_V);
+                P1_OK = true;
+                if (Wait == null)
+                {
+                    Wait = StartCoroutine(WaitOtherPlayer((int)P1_Value.x, (int)P1_Value.y));
+                    Debug.Log("Courou 1");
+                }
 			}
+
+            if((P2_H != 0 || P2_V != 0) && P2_OK == false)
+            {
+                P2_Value = new Vector2((int)P2_H, (int)P2_V);
+                P2_OK = true;
+                if (Wait == null)
+                {
+                    Wait = StartCoroutine(WaitOtherPlayer((int)P2_Value.x, (int)P2_Value.y));
+                    Debug.Log("Courou 2");
+                }
+            }
+
+            if (P1_OK && P2_OK)
+            {
+                if(Wait != null)
+                {
+                    StopCoroutine(Wait);
+                    Wait = null;
+                    Tirage();
+                }
+                
+            }
+
 		}
 		
+
+        IEnumerator WaitOtherPlayer( int x , int y)
+        {
+            yield return new WaitForSeconds(2f);
+            AttemptMove<Wall>(x, y);
+            P1_OK = false;
+            P2_OK = false;
+            Wait = null;
+        }
+
+        void Tirage()
+        {
+            if (P2_Value == P1_Value)
+            {
+                AttemptMove<Wall>((int)P1_Value.x, (int)P1_Value.y);
+                
+            }
+
+            if(P2_Value != P1_Value)
+            {
+                int i = Random.Range(1, 3);
+                if( i == 1)
+                {
+                    AttemptMove<Wall>((int)P1_Value.x, (int)P1_Value.y);
+                }
+                if( i == 2)
+                {
+                    AttemptMove<Wall>((int)P2_Value.x, (int)P2_Value.y);
+                }
+            }
+            P1_OK = false;
+            P2_OK = false;
+        }
+
+
+
+
+
+
+
+
+
+
 		//AttemptMove overrides the AttemptMove function in the base class MovingObject
 		//AttemptMove takes a generic parameter T which for Player will be of the type Wall, it also takes integers for x and y direction to move in.
 		protected override void AttemptMove <T> (int xDir, int yDir)
