@@ -29,6 +29,8 @@ namespace Completed
         bool P1_OK,P2_OK;
         Vector2 P1_Value, P2_Value;
         Coroutine Wait = null;
+        GameObject playerOneArrow;
+        GameObject playerTwoArrow;
 
 
         //Start overrides the Start function of MovingObject
@@ -134,6 +136,8 @@ namespace Completed
 			if((P1_H != 0 || P1_V != 0) && P1_OK == false)
 			{
                 P1_Value = new Vector2((int)P1_H, (int)P1_V);
+                playerOneArrow.SetActive(true);
+                playerOneArrow.gameObject.transform.Rotate(P1_H,P1_V, 0);
                 P1_OK = true;
                 if (Wait == null)
                 {
@@ -145,6 +149,8 @@ namespace Completed
             if((P2_H != 0 || P2_V != 0) && P2_OK == false)
             {
                 P2_Value = new Vector2((int)P2_H, (int)P2_V);
+                playerTwoArrow.SetActive(true);
+                playerOneArrow.gameObject.transform.Rotate(P1_H, P1_V, 0);
                 P2_OK = true;
                 if (Wait == null)
                 {
@@ -159,6 +165,8 @@ namespace Completed
                 {
                     StopCoroutine(Wait);
                     Wait = null;
+                    playerOneArrow.SetActive(false);
+                    playerOneArrow.SetActive(false);
                     Tirage();
                 }
                 
@@ -174,6 +182,8 @@ namespace Completed
             P1_OK = false;
             P2_OK = false;
             Wait = null;
+            playerOneArrow.SetActive(false);
+            playerOneArrow.SetActive(false);
         }
 
         void Tirage()
@@ -198,6 +208,8 @@ namespace Completed
             }
             P1_OK = false;
             P2_OK = false;
+            playerOneArrow.SetActive(false);
+            playerOneArrow.SetActive(false);
         }
 
 
