@@ -136,8 +136,7 @@ namespace Completed
 			if((P1_H != 0 || P1_V != 0) && P1_OK == false)
 			{
                 P1_Value = new Vector2((int)P1_H, (int)P1_V);
-                playerOneArrow.SetActive(true);
-                playerOneArrow.gameObject.transform.Rotate(P1_H,P1_V, 0);
+                Quaternion rotation = Quaternion.LookRotation(P1_Value);
                 P1_OK = true;
                 if (Wait == null)
                 {
@@ -150,7 +149,7 @@ namespace Completed
             {
                 P2_Value = new Vector2((int)P2_H, (int)P2_V);
                 playerTwoArrow.SetActive(true);
-                playerOneArrow.gameObject.transform.Rotate(P1_H, P1_V, 0);
+                Quaternion rotation = Quaternion.LookRotation(P1_Value);
                 P2_OK = true;
                 if (Wait == null)
                 {
