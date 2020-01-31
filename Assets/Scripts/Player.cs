@@ -29,7 +29,9 @@ namespace Completed
         bool P1_OK,P2_OK;
         Vector2 P1_Value, P2_Value;
         Coroutine Wait = null;
+        [SerializeField]
         GameObject playerOneArrow;
+        [SerializeField]
         GameObject playerTwoArrow;
 
 
@@ -136,7 +138,8 @@ namespace Completed
 			if((P1_H != 0 || P1_V != 0) && P1_OK == false)
 			{
                 P1_Value = new Vector2((int)P1_H, (int)P1_V);
-                Quaternion rotation = Quaternion.LookRotation(P1_Value);
+                playerOneArrow.SetActive(true);
+                Quaternion rotation = Quaternion.LookRotation(P1_Value, Vector3.forward);
                 P1_OK = true;
                 if (Wait == null)
                 {
