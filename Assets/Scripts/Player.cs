@@ -137,8 +137,7 @@ namespace Completed
 			{
                 P1_Value = new Vector2((int)P1_H, (int)P1_V);
                 playerOneArrow.SetActive(true);
-                playerOneArrow.transform.LookAt(P1_Value);
-               // Quaternion rotation = Quaternion.LookRotation(P1_Value, Vector3.forward);
+                playerOneArrow.transform.LookAt(P1_Value,Vector3.forward);
                 P1_OK = true;
                 if (Wait == null)
                 {
@@ -151,8 +150,7 @@ namespace Completed
             {
                 P2_Value = new Vector2((int)P2_H, (int)P2_V);
                 playerTwoArrow.SetActive(true);
-                playerTwoArrow.transform.LookAt(P2_Value);
-                // Quaternion rotation = Quaternion.LookRotation(P1_Value);
+                playerTwoArrow.transform.LookAt(P2_Value, Vector3.forward);
                 P2_OK = true;
                 if (Wait == null)
                 {
