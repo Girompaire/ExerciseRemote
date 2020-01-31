@@ -29,15 +29,8 @@ namespace Completed
         bool P1_OK,P2_OK;
         Vector2 P1_Value, P2_Value;
         Coroutine Wait = null;
-<<<<<<< HEAD
         public  GameObject playerOneArrow;
         public GameObject playerTwoArrow;
-=======
-        [SerializeField]
-        GameObject playerOneArrow;
-        [SerializeField]
-        GameObject playerTwoArrow;
->>>>>>> 978607a51a744b6d62e31eaf3949b1dc2414aef1
 
 
         //Start overrides the Start function of MovingObject
