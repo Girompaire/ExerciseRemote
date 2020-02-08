@@ -47,6 +47,9 @@ namespace Completed
 			
 			//Call the Start function of the MovingObject base class.
 			base.Start ();
+
+			playerOneArrow.GetComponentInChildren<SpriteRenderer>().color = Color.green;
+			playerTwoArrow.GetComponentInChildren<SpriteRenderer>().color = Color.blue;
 		}
 		
 		
@@ -141,13 +144,21 @@ namespace Completed
                 P1_OK = true;
                 if (Wait == null)
                 {
-                    playerOneArrow.SetActive(true);
-                    //Instantiate(playerOneArrow, this.transform.position, this.transform.rotation);
-                    playerOneArrow.transform.Rotate(this.transform.position, 1f);
+					//Instantiate(playerOneArrow, this.transform.position, this.transform.rotation);
 
                     Wait = StartCoroutine(WaitOtherPlayer((int)P1_Value.x, (int)P1_Value.y));
                     Debug.Log("Courou 1");
                 }
+
+				playerOneArrow.SetActive(true);
+				if (P1_H == 1)
+					playerOneArrow.transform.eulerAngles = new Vector3(0, 0, 180);
+				if (P1_H == -1)
+					playerOneArrow.transform.eulerAngles = new Vector3(0, 0, 0);
+				if (P1_V == 1)
+					playerOneArrow.transform.eulerAngles = new Vector3(0, 0, 270);
+				if (P1_V == -1)
+					playerOneArrow.transform.eulerAngles = new Vector3(0, 0, 90);
 			}
 
             if((P2_H != 0 || P2_V != 0) && P2_OK == false)
@@ -156,14 +167,19 @@ namespace Completed
                 P2_OK = true;
                 if (Wait == null)
                 {
-                playerTwoArrow.SetActive(true);
-                    //Instantiate(playerOneArrow, this.transform.position, this.transform.rotation);
-                    playerOneArrow.transform.Rotate(this.transform.position, 1f);
-
                     Wait = StartCoroutine(WaitOtherPlayer((int)P2_Value.x, (int)P2_Value.y));
                     Debug.Log("Courou 2");
                 }
-            }   
+				playerTwoArrow.SetActive(true);
+				if (P2_H == 1)
+					playerTwoArrow.transform.eulerAngles = new Vector3(0, 0, 180);
+				if (P2_H == -1)
+					playerTwoArrow.transform.eulerAngles = new Vector3(0, 0, 0);
+				if (P2_V == 1)
+					playerTwoArrow.transform.eulerAngles = new Vector3(0, 0, 270);
+				if (P2_V == -1)
+					playerTwoArrow.transform.eulerAngles = new Vector3(0, 0, 90);
+			}   
 
             if (P1_OK && P2_OK)
             {
@@ -171,16 +187,18 @@ namespace Completed
                 {
                     StopCoroutine(Wait);
                     Wait = null;
-                    playerOneArrow.SetActive(false);
-                    playerOneArrow.SetActive(false);
-                    Tirage();
-                }
+					StartCoroutine(SeeTwoPossibilty());
+				}
                 
             }
 
 		}
 		
-
+		IEnumerator SeeTwoPossibilty()
+		{
+			yield return new WaitForSeconds(1f);
+			Tirage();
+		}
         IEnumerator WaitOtherPlayer( int x , int y)
         {
             yield return new WaitForSeconds(2f);
@@ -189,7 +207,7 @@ namespace Completed
             P2_OK = false;
             Wait = null;
             playerOneArrow.SetActive(false);
-            playerOneArrow.SetActive(false);
+			playerTwoArrow.SetActive(false);
         }
 
         void Tirage()
@@ -215,7 +233,7 @@ namespace Completed
             P1_OK = false;
             P2_OK = false;
             playerOneArrow.SetActive(false);
-            playerOneArrow.SetActive(false);
+			playerTwoArrow.SetActive(false);
         }
 
 
