@@ -67,6 +67,8 @@ namespace Completed
 			int P1_V = 0;		//Used to store the vertical move direction.
             int P2_H = 0;
             int P2_V = 0;
+            playerOneArrow.transform.position = this.transform.position;
+            playerTwoArrow.transform.position = this.transform.position;
 
             //Check if we are running either in the Unity editor or in a standalone build.
 #if UNITY_STANDALONE || UNITY_WEBPLAYER
@@ -136,11 +138,13 @@ namespace Completed
 			if((P1_H != 0 || P1_V != 0) && P1_OK == false)
 			{
                 P1_Value = new Vector2((int)P1_H, (int)P1_V);
-                playerOneArrow.SetActive(true);
-                playerOneArrow.transform.LookAt(P1_Value,Vector3.forward);
                 P1_OK = true;
                 if (Wait == null)
                 {
+                    playerOneArrow.SetActive(true);
+                    //Instantiate(playerOneArrow, this.transform.position, this.transform.rotation);
+                    playerOneArrow.transform.Rotate(this.transform.position, 1f);
+
                     Wait = StartCoroutine(WaitOtherPlayer((int)P1_Value.x, (int)P1_Value.y));
                     Debug.Log("Courou 1");
                 }
@@ -149,15 +153,17 @@ namespace Completed
             if((P2_H != 0 || P2_V != 0) && P2_OK == false)
             {
                 P2_Value = new Vector2((int)P2_H, (int)P2_V);
-                playerTwoArrow.SetActive(true);
-                playerTwoArrow.transform.LookAt(P2_Value, Vector3.forward);
                 P2_OK = true;
                 if (Wait == null)
                 {
+                playerTwoArrow.SetActive(true);
+                    //Instantiate(playerOneArrow, this.transform.position, this.transform.rotation);
+                    playerOneArrow.transform.Rotate(this.transform.position, 1f);
+
                     Wait = StartCoroutine(WaitOtherPlayer((int)P2_Value.x, (int)P2_Value.y));
                     Debug.Log("Courou 2");
                 }
-            }
+            }   
 
             if (P1_OK && P2_OK)
             {
